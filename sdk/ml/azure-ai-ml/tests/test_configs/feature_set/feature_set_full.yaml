@@ -1,10 +1,10 @@
-name: test-featureset
+name: test-feature-set
 version: "1"
 entities: ["azureml:test:1", "azureml:test:2"]
 specification:
   path: local/
 stage: registered
-description: Test featureset
+description: Test feature-set
 materialization_settings: 
   schedule:
     type: Recurrence
