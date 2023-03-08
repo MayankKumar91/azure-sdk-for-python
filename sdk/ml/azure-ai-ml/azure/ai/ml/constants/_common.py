@@ -197,8 +197,8 @@ class AzureMLResourceType(object):
     SCHEDULE = "schedules"
     REGISTRY = "registries"
     CONNECTIONS = "connections"
-    FEATURESET = "feature_sets"
-    FEATURESTORE_ENTITY = "featurestore_entities"
+    FEATURE_SET = "feature_sets"
+    FEATURE_STORE_ENTITY = "feature_store_entities"
     FEATURE_STORE = "feature_store"
 
     NAMED_TYPES = {
@@ -210,7 +210,7 @@ class AzureMLResourceType(object):
         DATASTORE,
         SCHEDULE,
     }
-    VERSIONED_TYPES = {MODEL, DATA, CODE, ENVIRONMENT, COMPONENT, FEATURESET, FEATURESTORE_ENTITY}
+    VERSIONED_TYPES = {MODEL, DATA, CODE, ENVIRONMENT, COMPONENT, FEATURE_SET, FEATURE_STORE_ENTITY}
 
 
 class ArmConstants(object):

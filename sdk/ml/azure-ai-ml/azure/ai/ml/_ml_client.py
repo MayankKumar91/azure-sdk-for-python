@@ -73,7 +73,7 @@ from azure.ai.ml.entities import (
     Datastore,
     Environment,
     FeatureSet,
-    FeaturestoreEntity,
+    FeatureStoreEntity,
     Job,
     JobSchedule,
     Model,
@@ -93,7 +93,7 @@ from azure.ai.ml.operations import (
     DatastoreOperations,
     EnvironmentOperations,
     FeatureSetOperations,
-    FeaturestoreEntityOperations,
+    FeatureStoreEntityOperations,
     FeatureStoreOperations,
     JobOperations,
     ModelOperations,
@@ -348,14 +348,14 @@ class MLClient:
         )
         self._operation_container.add(AzureMLResourceType.WORKSPACE, self._workspaces)
 
-        self._featurestores = FeatureStoreOperations(
+        self._feature_stores = FeatureStoreOperations(
             self._operation_scope,
             self._rp_service_client,
             self._operation_container,
             self._credential,
             **app_insights_handler_kwargs,
         )
-        self._operation_container.add(AzureMLResourceType.FEATURE_STORE, self._featurestores)
+        self._operation_container.add(AzureMLResourceType.FEATURE_STORE, self._feature_stores)
 
         self._workspace_outbound_rules = WorkspaceOutboundRuleOperations(
             self._operation_scope,
@@ -515,12 +515,12 @@ class MLClient:
             self._datastores,
             **ops_kwargs,
         )
-        self._operation_container.add(AzureMLResourceType.FEATURESET, self._feature_sets)
+        self._operation_container.add(AzureMLResourceType.FEATURE_SET, self._feature_sets)
 
-        self._featurestore_entities = FeaturestoreEntityOperations(
+        self._feature_store_entities = FeatureStoreEntityOperations(
             self._operation_scope, self._operation_config, self._service_client_02_2023_preview, **ops_kwargs
         )
-        self._operation_container.add(AzureMLResourceType.FEATURESTORE_ENTITY, self._featurestore_entities)
+        self._operation_container.add(AzureMLResourceType.FEATURE_STORE_ENTITY, self._feature_store_entities)
 
     @classmethod
     def from_config(
@@ -649,12 +649,12 @@ class MLClient:
 
     @property
     @experimental
-    def featurestores(self) -> FeatureStoreOperations:
-        """A collection of featurestore related operations.
-        :return: Featurestore operations
+    def feature_stores(self) -> FeatureStoreOperations:
+        """A collection of feature-store related operations.
+        :return: FeatureStore operations
         :rtype: FeatureStoreOperations
         """
-        return self._featurestores
+        return self._feature_stores
 
     @property
     def connections(self) -> WorkspaceConnectionsOperations:
@@ -784,13 +784,13 @@ class MLClient:
         return self._feature_sets
 
     @property
-    def featurestore_entities(self) -> FeaturestoreEntityOperations:
-        """A collection of featurestore_entity related operations.
+    def feature_store_entities(self) -> FeatureStoreEntityOperations:
+        """A collection of feature-store-entity related operations.
 
-        :return: FeaturestoreEntity operations
-        :rtype: FeaturestoreEntityOperations
+        :return: FeatureStoreEntity operations
+        :rtype: FeatureStoreEntityOperations
         """
-        return self._featurestore_entities
+        return self._feature_store_entities
 
     @property
     def subscription_id(self) -> str:
@@ -1049,13 +1049,13 @@ def _(entity: JobSchedule, operations, *args, **kwargs):
     return operations[AzureMLResourceType.SCHEDULE].begin_create_or_update(entity, **kwargs)
 
 
-@_begin_create_or_update.register(FeaturestoreEntity)
-def _(entity: FeaturestoreEntity, operations, *args, **kwargs):
-    module_logger.debug("Creating or updating featurestore_entity")
-    return operations[AzureMLResourceType.FEATURESTORE_ENTITY].begin_create_or_update(entity, **kwargs)
+@_begin_create_or_update.register(FeatureStoreEntity)
+def _(entity: FeatureStoreEntity, operations, *args, **kwargs):
+    module_logger.debug("Creating or updating feature_store_entity")
+    return operations[AzureMLResourceType.FEATURE_STORE_ENTITY].begin_create_or_update(entity, **kwargs)
 
 
 @_begin_create_or_update.register(FeatureSet)
 def _(entity: FeatureSet, operations, *args, **kwargs):
     module_logger.debug("Creating or updating feature-set")
-    return operations[AzureMLResourceType.FEATURESET].begin_create_or_update(entity, **kwargs)
+    return operations[AzureMLResourceType.FEATURE_SET].begin_create_or_update(entity, **kwargs)
