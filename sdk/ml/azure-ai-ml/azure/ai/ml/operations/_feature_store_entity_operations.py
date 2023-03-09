@@ -4,6 +4,9 @@
 
 # pylint: disable=protected-access
 
+import os
+import json
+from pathlib import Path
 from typing import Dict, Optional
 
 from marshmallow.exceptions import ValidationError as SchemaValidationError
@@ -13,7 +16,8 @@ from azure.ai.ml._restclient.v2023_02_01_preview.models import ListViewType, Fea
 from azure.ai.ml._restclient.v2023_02_01_preview import AzureMachineLearningWorkspaces as ServiceClient022023Preview
 from azure.ai.ml._scope_dependent_operations import OperationConfig, OperationScope, _ScopeDependentOperations
 from azure.ai.ml.exceptions import ErrorCategory, ErrorTarget, ValidationErrorType, ValidationException
-
+from azure.ai.ml._artifacts._artifact_utilities import _check_and_upload_path
+from azure.ai.ml.operations._datastore_operations import DatastoreOperations
 
 # from azure.ai.ml._telemetry import ActivityType, monitor_with_activity
 from azure.ai.ml._utils._asset_utils import (
@@ -21,6 +25,7 @@ from azure.ai.ml._utils._asset_utils import (
     _get_latest_version_from_container,
     _resolve_label_to_asset,
 )
+from azure.ai.ml._utils._featureset_utils import read_featureset_metadata_contents
 from azure.ai.ml._utils._logger_utils import OpsLogger
 from azure.ai.ml.entities import FeatureStoreEntity
 from azure.ai.ml._utils._experimental import experimental
@@ -38,6 +43,7 @@ class FeatureStoreEntityOperations(_ScopeDependentOperations):
         operation_scope: OperationScope,
         operation_config: OperationConfig,
         service_client: ServiceClient022023Preview,
+        datastore_operations: DatastoreOperations,
         **kwargs: Dict,
     ):
 
@@ -46,6 +52,7 @@ class FeatureStoreEntityOperations(_ScopeDependentOperations):
         self._operation = service_client.featurestore_entity_versions
         self._container_operation = service_client.featurestore_entity_containers
         self._service_client = service_client
+        self._datastore_operation = datastore_operations
         self._init_kwargs = kwargs
 
         # Maps a label to a function which given an asset name,
